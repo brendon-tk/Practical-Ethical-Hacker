@@ -1,0 +1,47 @@
+Ethical hacking follows a structured process to identify and address security vulnerabilities. The five key stages of ethical hacking are:
+
+1. Reconnaissance (Information Gathering)
+This is the pre-attack phase, where the ethical hacker gathers as much information as possible about the target system. It can be active (direct interaction) or passive (indirect methods).
+
+🔹 Techniques:
+✔ Google Dorking
+✔ WHOIS lookup
+✔ Social engineering
+✔ Network scanning
+✔ DNS footprinting
+
+2. Scanning & Enumeration
+In this phase, the ethical hacker identifies live hosts, open ports, and services running on the target system. The goal is to detect vulnerabilities.
+
+🔹 Techniques & Tools:
+✔ Nmap (port scanning)
+✔ Netcat (network connections)
+✔ Nessus (vulnerability scanning)
+✔ SNMP & SMB enumeration
+
+3. Gaining Access (Exploitation)
+Here, the hacker exploits vulnerabilities to gain unauthorized access to the system. The level of access gained determines the attack impact.
+
+🔹 Methods:
+✔ Exploiting weak credentials
+✔ SQL Injection
+✔ Buffer Overflow
+✔ Privilege Escalation
+
+4. Maintaining Access (Persistence)
+After gaining access, the hacker attempts to maintain control over the system for future exploitation or further testing.
+
+🔹 Persistence Techniques:
+✔ Installing backdoors (e.g., Netcat, Meterpreter)
+✔ Creating hidden user accounts
+✔ Modifying system services
+✔ Rootkits and Trojans
+
+5. Covering Tracks (Clearing Evidence)
+To avoid detection, the hacker removes logs and traces of their activities to ensure stealth.
+
+🔹 Techniques:
+✔ Deleting logs (Windows Event Viewer, Linux log files)
+✔ Disabling security monitoring tools
+✔ Modifying timestamps (Timestomping)
+✔ Using anti-forensic tools
