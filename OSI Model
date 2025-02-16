@@ -1,0 +1,9 @@
+# OSI Model
+
+1. Physical Layer - data cables, cat6 cables (Something you can plug in)
+2. Data Layer - switching, mac addresses
+3. Network layer - IP Address, routing
+4. Transport - TCP/UDP
+5. Session - session management
+6. Presentation - WMV, JPEG, MOV
+7. Application - HTTP, SMTP
