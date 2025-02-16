@@ -1,0 +1,20 @@
+# Common Ports and Protocols
+
+TCP
+
+1. FTP 21
+2. SSH 22
+3. Telnet 23
+4. SMTP 25
+5. DNS 53
+6. HTTP 80/ HTTPS 443
+7. POP3 110
+8. SMB (139 + 445)
+9. IMAP 143
+
+UDP
+
+1. DNS 53
+2. DHCP 67, 68
+3. TFTP 69 Trivial TFP
+4. SNMP 161 Simple Network Management Protocol
