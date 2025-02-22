@@ -1,0 +1,130 @@
+## Penetration Testing Guide
+
+### Email Discovery
+- Use [Hunter.io](https://hunter.io/search/tcm-sec.com) to find associated email addresses.
+
+### Subdomain Enumeration (Part 1)
+Install and use Sublist3r to find subdomains:
+```bash
+apt install sublist3r
+sublist3r -d tesla.com -t 100
+```
+Alternative: Use [crt.sh](https://crt.sh) for certificate transparency logs.
+```bash
+%.tesla.com
+```
+
+### Identifying Website Technologies
+- Use **Wappalyzer** (Firefox extension) to analyze website technologies.
+- Alternatively, use `whatweb`:
+```bash
+whatweb https://tesla.com
+```
+(Note: `whatweb` may not always retrieve accurate data.)
+
+### Information Gathering with Burp Suite
+Use Burp Suite for active and passive reconnaissance.
+
+### Advanced Google Search Operators
+Leverage [Google Dorks](https://ahrefs.com/blog/google-advanced-search-operators/) for information gathering.
+
+---
+
+## Kioptrix Machine Enumeration
+
+### Network Discovery
+Identify active hosts on the network:
+```bash
+netdiscover -r 192.168.0.0/24
+```
+
+### Nmap Scanning
+Perform an initial scan for open ports:
+```bash
+nmap -p- kioptrix -T5 -v
+```
+For a more detailed scan of specific ports:
+```bash
+nmap -p 22,80,111,139,443,32768 -A kioptrix -v
+```
+#### Sample Nmap Output (Abbreviated):
+```bash
+PORT      STATE SERVICE     VERSION
+22/tcp    open  ssh         OpenSSH 2.9p2 (protocol 1.99)
+80/tcp    open  http        Apache httpd 1.3.20
+111/tcp   open  rpcbind     2 (RPC #100000)
+139/tcp   open  netbios-ssn Samba smbd
+443/tcp   open  ssl/https   Apache/1.3.20 (Unix)
+32768/tcp open  status      1 (RPC #100024)
+```
+
+### Service Analysis
+- **SSH:** Running an outdated version (OpenSSH 2.9p2)
+- **Web Server:** Apache 1.3.20 (Red-Hat/Linux) with **mod_ssl/2.8.4** (potentially vulnerable)
+- **SMB:** Samba 2.2.1a running on port 139
+
+### Web Application Enumeration
+#### Directory Bruteforcing
+```bash
+dirsearch -u http://kioptrix
+```
+Example findings:
+```bash
+[23:50:49] 301 -  /manual  ->  http://127.0.0.1/manual/             
+[23:50:52] 200 -  /mrtg/   
+[23:51:16] 200 -  /test.php
+[23:51:20] 301 -  /usage  ->  http://127.0.0.1/usage/
+[23:51:35] 403 -  /~root  
+[23:51:35] 403 -  /~operator
+```
+
+#### Web Vulnerability Scanning
+Use `nikto` to check for vulnerabilities:
+```bash
+nikto -h http://kioptrix
+```
+Potential findings:
+- **mod_ssl 2.8.7 and lower**: Vulnerable to remote buffer overflow, potentially allowing shell access.
+
+---
+
+## SMB Enumeration
+### Using Metasploit for SMB Version Detection
+```bash
+msfconsole
+use auxiliary/scanner/smb/smb_version
+set rhosts 192.168.0.5
+run
+```
+
+### Accessing SMB Shares with SMBClient
+```bash
+smbclient -L \\192.168.0.5\
+```
+Attempt to access the `ADMIN$` share:
+```bash
+smbclient \\192.168.0.5\ADMIN$
+```
+
+---
+
+## Exploitation Attempts
+
+### SSH Access (Legacy Compatibility)
+Since the SSH version is outdated, connect using weaker encryption algorithms:
+```bash
+ssh 192.168.0.5 -o KexAlgorithms=+diffie-hellman-group-exchange-sha1 -o HostKeyAlgorithms=+ssh-rsa -c aes128-cbc
+```
+
+### Further Exploitation
+- **Check Apache vulnerabilities** on port 443.
+- **Investigate Samba (SMB) for potential exploits.**
+- **Look for local privilege escalation opportunities.**
+
+---
+
+### Next Steps
+- Use **Metasploit** or **manual exploitation** techniques to gain access.
+- Escalate privileges to root.
+- Extract and analyze system information for post-exploitation activities.
+
